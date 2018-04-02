@@ -11,9 +11,11 @@ import AVFoundation
 
 class MP3Player: NSObject, AVAudioPlayerDelegate {
     
-    var player: AVAudioPlayer?
+    var player: AVPlayer?
     var currentTrackIndex = 0
     var tracks = [String]()
+    var item: AVPlayerItem?
+    var isPlaying: Bool = false
     
     override init() {
         
@@ -30,15 +32,16 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
         var error: NSError?
         let url = NSURL.init(fileURLWithPath: tracks[currentTrackIndex] as String)
         do {
-            player = try AVAudioPlayer(contentsOf: url as URL)
+            player = try AVPlayer(url: url as URL)
+            item = try AVPlayerItem(url: url as URL)
         } catch {
             print(error)
         }
         if let hasError = error {
             print(hasError)
         } else {
-            player?.delegate = self
-            player?.prepareToPlay()
+            //player?.delegate = self
+            //player?.prepareToPlay()
             NotificationCenter.default.post(
                 name: NSNotification.Name(rawValue: "SetTrackNameText"),
                 object: nil)
@@ -47,44 +50,49 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
     
     func play() {
         
-        if player?.isPlaying == false {
+        if isPlaying == false {
             player?.play()
+            isPlaying = true
         } else {
             player?.pause()
+            isPlaying = false
         }
     }
     
     func stop() {
         
-        if player?.isPlaying == true {
-            player?.stop()
-            player?.currentTime = 0
-        }
+//        if isPlaying == true {
+//            player?.pause()
+//            isPlaying = false
+//        }
     }
     
     func nextSong(songFinishedPlaying: Bool) {
         
         var playerWasPlaying = false
-        if player?.isPlaying == true{
-            player?.stop()
+        if isPlaying == true{
+            player?.pause()
+            isPlaying = false
             playerWasPlaying = true
         }
         
         currentTrackIndex += 1
-        if currentTrackIndex >= tracks.count {
+        if currentTrackIndex > tracks.count - 1 {
             currentTrackIndex = 0
         }
         queueTrack()
-        if playerWasPlaying || songFinishedPlaying {
+        if playerWasPlaying || isPlaying {
             player?.play()
+            isPlaying = true
         }
     }
     
     func previousSong() {
         
         var playerWasPlaying = false
-        if player?.isPlaying == true {
-            player?.stop()
+        if isPlaying == true {
+            player?.pause()
+            isPlaying = false
             playerWasPlaying = true
         }
         currentTrackIndex += -1
@@ -95,7 +103,15 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
         queueTrack()
         if playerWasPlaying {
             player?.play()
+            isPlaying = true
         }
+    }
+    
+    func getTrackNameForTable(index: Int) -> String {
+        
+        let trackName = tracks[index]
+        let theFileName = (trackName as NSString).lastPathComponent
+        return theFileName
     }
     
     func getCurrentTrackName() -> String {
@@ -107,13 +123,12 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
     
     func getCurrentTimeAsString() -> String {
         
-        var seconds = 0
-        var minutes = 0
-        if let time = player?.currentTime {
-            seconds = Int(time) % 60
-            minutes = (Int(time) / 60) % 60
-        }
-        return String(format: "%0.2d:%0.2d", minutes, seconds)
+        var seconds = 0.0
+        var minutes = 0.0
+        let time = player?.currentTime()
+        seconds = Double(Int((time?.seconds)!) % 60)
+        minutes = Double(Int((time?.seconds)! / 60) % 60)
+        return String(format: "%0.2d:%0.2d", Int(minutes), Int(seconds))
     }
     
     func getFullSongTime() -> Double {
@@ -127,19 +142,18 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
     
     func changeTime(newTime: Double) {
         
-        player?.currentTime = newTime
+        let myCMTime = CMTimeMake(Int64(Int(newTime)), 1)
+        player?.seek(to: myCMTime)
     }
     
-    func getProgress() -> Float {
+    func getProgress() -> Double {
         
-        var theCurrentTime = 0.0
-        var theCurrentDuration = 0.0
-        guard let currentTime = player?.currentTime, let duration = player?.duration else {
-            return 0.0
-        }
-        theCurrentTime = currentTime
-        theCurrentDuration = duration
-        return Float(theCurrentTime/theCurrentDuration)
+        var theCurrentTime: CMTime
+        var theCurrentDuration: CMTime
+        let currentTime = player?.currentTime()
+        theCurrentTime = currentTime!
+        theCurrentDuration = (item?.duration)!
+        return theCurrentDuration.seconds/theCurrentTime.seconds
     }
     
     func setVolume(volume: Float) {
