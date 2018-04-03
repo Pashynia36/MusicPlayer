@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+// Class for reading our Files(mp3) from Bundle
 class FileReader: NSObject {
     
     class func readFiles() -> [String] {

@@ -11,12 +11,15 @@ import UIKit
 class MusicTableViewCell: UITableViewCell {
 
     @IBOutlet weak var musicLabel: UILabel!
-    var isPlaying: Bool = false
-
-    func prepareMusicForMe(music: MP3Player, index: Int, isPlaying: Bool) {
+    
+    func prepareMusicForMe(music: MusicModel) {
         
-        musicLabel.text = music.getTrackNameForTable(index: index)
-        // Needs to set "selected"
+        musicLabel.text = music.musicSong
+        if music.isPlayingNow {
+            self.backgroundColor = UIColor.lightGray
+        } else {
+            self.backgroundColor = UIColor.white
+        }
     }
     
     override func awakeFromNib() {

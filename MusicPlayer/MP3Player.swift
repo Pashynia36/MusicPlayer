@@ -32,16 +32,13 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
         var error: NSError?
         let url = NSURL.init(fileURLWithPath: tracks[currentTrackIndex] as String)
         do {
-            player = try AVPlayer(url: url as URL)
-            item = try AVPlayerItem(url: url as URL)
-        } catch {
-            print(error)
+            player = AVPlayer(url: url as URL)
+            item = AVPlayerItem(url: url as URL)
         }
         if let hasError = error {
             print(hasError)
+            error = nil
         } else {
-            //player?.delegate = self
-            //player?.prepareToPlay()
             NotificationCenter.default.post(
                 name: NSNotification.Name(rawValue: "SetTrackNameText"),
                 object: nil)
@@ -59,17 +56,9 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
         }
     }
     
-    func stop() {
-        
-//        if isPlaying == true {
-//            player?.pause()
-//            isPlaying = false
-//        }
-    }
-    
     func nextSong(songFinishedPlaying: Bool) {
         
-        var playerWasPlaying = false
+        var playerWasPlaying = songFinishedPlaying
         if isPlaying == true{
             player?.pause()
             isPlaying = false
@@ -99,7 +88,6 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
         if currentTrackIndex < 0 {
             currentTrackIndex = tracks.count - 1
         }
-        
         queueTrack()
         if playerWasPlaying {
             player?.play()
@@ -149,21 +137,13 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
     func getProgress() -> Double {
         
         var theCurrentTime: CMTime
-        var theCurrentDuration: CMTime
         let currentTime = player?.currentTime()
         theCurrentTime = currentTime!
-        theCurrentDuration = (item?.duration)!
-        return theCurrentDuration.seconds/theCurrentTime.seconds
+        return Double(theCurrentTime.seconds)
     }
     
     func setVolume(volume: Float) {
         
         player?.volume = volume
-    }
-    
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        if flag == true {
-            nextSong(songFinishedPlaying: true)
-        }
     }
 }

@@ -11,9 +11,13 @@ import AVFoundation
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    // initializing vars
     var positionOfSong: Int = 0
     var mp3Player: MP3Player?
     var timer: Timer?
+    var playVar = false
+    var myMusicModel: [MusicModel]? = []
+    var songLength: Double = 0.0
     
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var trackTime: UILabel!
@@ -24,10 +28,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        // Smaller thumb of progress of song
         progressBar.setThumbImage(image, for: .normal)
         mp3Player = MP3Player()
+        // Getting array of music names
+        getThemMusic()
         setupNotificationCenter()
+        // Setting up name of song to view
         setName()
+        // Initializing duration of firstSong
+        songLength = (mp3Player?.getFullSongTime())!
         updateViews()
     }
     
@@ -38,39 +48,51 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "music")
-        cell?.textLabel?.text = mp3Player?.getTrackNameForTable(index: indexPath.row)
-        return cell!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "music") as! MusicTableViewCell
+        cell.prepareMusicForMe(music: myMusicModel![indexPath.row])
+        return cell
     }
     
     @IBAction func playSong(sender: AnyObject) {
         
         mp3Player?.play()
-        startTimer()
-        setMeSelected()
-    }
-    
-    @IBAction func stopSong(sender: AnyObject) {
-        
-        mp3Player?.stop()
-        updateViews()
-        timer?.invalidate()
+        if !playVar {
+            startTimer()
+            playVar = true
+        } else {
+            timer?.invalidate()
+            playVar = false
+        }
+        setNewSong()
     }
     
     @IBAction func playNextSong(sender: AnyObject) {
         
         mp3Player?.nextSong(songFinishedPlaying: false)
+        nextSong()
+    }
+    
+    func nextSong() {
+        
         startTimer()
-        tableView.deselectRow(at:
-            IndexPath(row: positionOfSong, section: 0),
-            animated: true)
+        if myMusicModel != nil {
+            myMusicModel![positionOfSong].isPlayingNow = false
+            tableView.reloadData()
+        }
         positionOfSong += 1
         if positionOfSong == mp3Player?.tracks.count {
             positionOfSong = 0
         }
-        setMeSelected()
+        setNewSong()
     }
     
+    // MARK:- Demo of song selection
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//
+//        mp3Player?.currentTrackIndex = indexPath.row
+//        mp3Player?.queueTrack()
+//        mp3Player?.play()
+//    }
     
     @IBAction func setVolume(sender: UISlider) {
         
@@ -81,17 +103,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         mp3Player?.previousSong()
         startTimer()
-        tableView.deselectRow(at:
-            IndexPath(row: positionOfSong, section: 0),
-                              animated: true)
+        if myMusicModel != nil {
+            myMusicModel![positionOfSong].isPlayingNow = false
+            tableView.reloadData()
+        }
         positionOfSong += -1
         if positionOfSong < 0 {
             positionOfSong = (mp3Player?.tracks.count)! - 1
         }
-        setMeSelected()
+        setNewSong()
     }
     
     func startTimer() {
+        
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateViewsWithTimer(theTimer:)), userInfo: nil, repeats: true)
     }
     
@@ -102,9 +126,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func updateViews() {
         
+        //Updating time & progress
         trackTime.text = mp3Player?.getCurrentTimeAsString()
-        if let progress = mp3Player?.getProgress() {
-            progressBar.value = Float(progress)
+        let currentTime = mp3Player?.getProgress()
+        progressBar.value = Float(1.0 / (songLength/currentTime!))
+        if progressBar.value == 1.0 {
+            mp3Player?.nextSong(songFinishedPlaying: true)
+            nextSong()
         }
     }
     
@@ -122,6 +150,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             object:nil)
     }
     
+    // Function to scroll current music
     @IBAction func progressBarAction(_ sender: UISlider) {
         
         let fullTime = Float((mp3Player?.getFullSongTime())!)
@@ -131,10 +160,32 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         updateViews()
     }
     
-    func setMeSelected() {
+    // Setting new value for model & taking the duration
+    func setNewSong() {
         
-        tableView.reloadData()
-        tableView.cellForRow(at: IndexPath.init(row: positionOfSong, section: 0))?.isSelected = true
+        songLength = (mp3Player?.getFullSongTime())!
+        if myMusicModel != nil {
+            myMusicModel![positionOfSong].isPlayingNow = true
+        }
+        animateMyCell()
+    }
+    
+    // Initializing the array of music
+    func getThemMusic() {
+        
+        for i in 0..<(mp3Player?.tracks.count)! {
+            myMusicModel?.append(
+                MusicModel(musicSong: (mp3Player?.getTrackNameForTable(index: i))!,
+                           isPlayingNow: false))
+        }
+    }
+    
+    func animateMyCell() {
+        
+        UIView.animate(withDuration: 1.0) {
+            self.tableView.cellForRow(at: IndexPath(row: self.positionOfSong, section: 0))?.backgroundColor = UIColor.lightGray
+            print(IndexPath(row: self.positionOfSong, section: 0))
+        }
     }
 }
 

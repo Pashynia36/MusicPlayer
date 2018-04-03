@@ -40,14 +40,6 @@
                                     <action selector="playSongWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vUh-p7-0bJ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Edv-Gu-KnD">
-                                <rect key="frame" x="172" y="380" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="stop"/>
-                                <connections>
-                                    <action selector="stopSongWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="p3C-Cc-1OG"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zZv-Pr-S5x">
                                 <rect key="frame" x="226" y="342" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -57,14 +49,6 @@
                                     <action selector="playNextSongWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tKH-Kb-tdk"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="6rW-q3-Zb2">
-                                <rect key="frame" x="128" y="418" width="118" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <action selector="setVolumeWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="HdV-YX-QjZ"/>
-                                </connections>
-                            </slider>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9xV-Dd-riH">
                                 <rect key="frame" x="119" y="342" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -116,6 +100,14 @@
                                     <action selector="progressBarAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="9ES-cZ-m9x"/>
                                 </connections>
                             </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="6rW-q3-Zb2">
+                                <rect key="frame" x="128" y="380" width="118" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="setVolumeWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="HdV-YX-QjZ"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -145,6 +137,5 @@
         <image name="next" width="512" height="512"/>
         <image name="playPause" width="626" height="626"/>
         <image name="prev" width="512" height="512"/>
-        <image name="stop" width="512" height="512"/>
     </resources>
 </document>
