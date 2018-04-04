@@ -18,8 +18,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var mp4Player: MP4Player?
     var timer: Timer?
     var playVar = false
-    var myMusicModel: [MusicModel]? = []
-    var myVideoModel: [VideoModel]? = []
+    var myMediaModel: [MediaModel]? = []
     var songLength: Double = 0.0
     
     @IBOutlet weak var trackName: UILabel!
@@ -57,7 +56,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "music") as! MusicTableViewCell
-        cell.prepareMusicForMe(isPlaying: myMusicModel![indexPath.row])
+        cell.prepareMusicForMe(isPlaying: myMediaModel![indexPath.row] as! MusicModel)
         return cell
     }
     
@@ -83,8 +82,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func nextSong() {
         
         startTimer()
-        if myMusicModel != nil {
-            myMusicModel![positionOfSong].isPlayingNow = false
+        if myMediaModel != nil {
+            myMediaModel![positionOfSong].isPlayingNow = false
             tableView.reloadData()
         }
         positionOfSong += 1
@@ -111,8 +110,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         mp3Player?.previousSong()
         startTimer()
-        if myMusicModel != nil {
-            myMusicModel![positionOfSong].isPlayingNow = false
+        if myMediaModel != nil {
+            myMediaModel![positionOfSong].isPlayingNow = false
             tableView.reloadData()
         }
         positionOfSong += -1
@@ -172,8 +171,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func setNewSong() {
         
         songLength = (mp3Player?.getFullSongTime())!
-        if myMusicModel != nil {
-            myMusicModel![positionOfSong].isPlayingNow = true
+        if myMediaModel != nil {
+            myMediaModel![positionOfSong].isPlayingNow = true
         }
         animateMyCell()
     }
@@ -182,13 +181,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func getThemMusic() {
         
         for i in 0..<(mp3Player?.tracks.count)! {
-            myMusicModel?.append(MusicModel.init(isPlayingNow: false, musicUrl: (mp3Player?.getTrackNameForTable(index: i))!))
+            myMediaModel?.append(MusicModel(isPlayingNow: false, musicUrl: (mp3Player?.getTrackNameForTable(index: i))!))
         }
         for i in 0..<(mp4Player?.videos.count)! {
-            myVideoModel?.append(VideoModel.init(isPlayingNow: false, videoUrl: (mp4Player?.getVideoNameForTable(index: i))!))
+            myMediaModel?.append(VideoModel(isPlayingNow: false, videoUrl: (mp4Player?.getVideoNameForTable(index: i))!))
         }
-        print(myVideoModel![0])
-        //print(myVideoModel![0].videoUrl)
     }
     
     func animateMyCell() {

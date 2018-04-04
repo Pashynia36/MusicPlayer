@@ -57,6 +57,26 @@ class MP4Player: NSObject {
         }
     }
     
+    func nextSong(videoFinishedPlaying: Bool) {
+        
+        var playerWasPlaying = videoFinishedPlaying
+        if isPlaying == true{
+            videoPlayer?.pause()
+            isPlaying = false
+            playerWasPlaying = true
+        }
+        
+        currentVideoIndex += 1
+        if currentVideoIndex > videos.count - 1 {
+            currentVideoIndex = 0
+        }
+        queueTrack()
+        if playerWasPlaying || isPlaying {
+            videoPlayer?.play()
+            isPlaying = true
+        }
+    }
+    
     func getVideoNameForTable(index: Int) -> String {
         
         let videoName = videos[index]

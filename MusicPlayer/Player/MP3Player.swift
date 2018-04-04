@@ -84,7 +84,7 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
             isPlaying = false
             playerWasPlaying = true
         }
-        currentTrackIndex += -1
+        currentTrackIndex -= 1
         if currentTrackIndex < 0 {
             currentTrackIndex = tracks.count - 1
         }
