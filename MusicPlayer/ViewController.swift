@@ -209,12 +209,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @objc func checkAction(sender: UITapGestureRecognizer) {
         
-        mp4Player?.play()
         let videoPlayer = AVPlayerViewController()
         videoPlayer.player = mp4Player?.videoPlayer
-        present(videoPlayer, animated: true, completion: {
-            self.mp4Player?.play()
-        })
+        present(videoPlayer, animated: true, completion: nil)
     }
 }
 
