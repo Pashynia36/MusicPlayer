@@ -8,29 +8,37 @@
 
 import UIKit
 import AVFoundation
+import AVKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // initializing vars
     var positionOfSong: Int = 0
     var mp3Player: MP3Player?
+    var mp4Player: MP4Player?
     var timer: Timer?
     var playVar = false
     var myMusicModel: [MusicModel]? = []
+    var myVideoModel: [VideoModel]? = []
     var songLength: Double = 0.0
     
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var trackTime: UILabel!
     @IBOutlet weak var progressBar: UISlider!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var videoView: UIView!
     let image = UIImage(named: "tint")
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        // Gesture for video
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(self.checkAction))
+        self.videoView.addGestureRecognizer(gesture)
         // Smaller thumb of progress of song
         progressBar.setThumbImage(image, for: .normal)
         mp3Player = MP3Player()
+        mp4Player = MP4Player()
         // Getting array of music names
         getThemMusic()
         setupNotificationCenter()
@@ -49,7 +57,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "music") as! MusicTableViewCell
-        cell.prepareMusicForMe(music: myMusicModel![indexPath.row])
+        cell.prepareMusicForMe(isPlaying: myMusicModel![indexPath.row])
         return cell
     }
     
@@ -129,7 +137,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //Updating time & progress
         trackTime.text = mp3Player?.getCurrentTimeAsString()
         let currentTime = mp3Player?.getProgress()
-        progressBar.value = Float(1.0 / (songLength/currentTime!))
+        progressBar.value = Float(currentTime! / songLength)
         if progressBar.value == 1.0 {
             mp3Player?.nextSong(songFinishedPlaying: true)
             nextSong()
@@ -174,10 +182,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func getThemMusic() {
         
         for i in 0..<(mp3Player?.tracks.count)! {
-            myMusicModel?.append(
-                MusicModel(musicSong: (mp3Player?.getTrackNameForTable(index: i))!,
-                           isPlayingNow: false))
+            myMusicModel?.append(MusicModel.init(isPlayingNow: false, musicUrl: (mp3Player?.getTrackNameForTable(index: i))!))
         }
+        for i in 0..<(mp4Player?.videos.count)! {
+            myVideoModel?.append(VideoModel.init(isPlayingNow: false, videoUrl: (mp4Player?.getVideoNameForTable(index: i))!))
+        }
+        print(myVideoModel![0])
+        //print(myVideoModel![0].videoUrl)
     }
     
     func animateMyCell() {
@@ -186,6 +197,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.tableView.cellForRow(at: IndexPath(row: self.positionOfSong, section: 0))?.backgroundColor = UIColor.lightGray
             print(IndexPath(row: self.positionOfSong, section: 0))
         }
+    }
+    
+    @IBAction func playVideo(_ sender: Any) {
+        
+        let playerLayer = AVPlayerLayer(player: mp4Player?.videoPlayer)
+        playerLayer.frame = self.videoView.bounds
+        self.videoView.layer.addSublayer(playerLayer)
+        mp4Player?.play()
+    }
+    
+    @objc func checkAction(sender: UITapGestureRecognizer) {
+        
+        mp4Player?.play()
+        let videoPlayer = AVPlayerViewController()
+        videoPlayer.player = mp4Player?.videoPlayer
+        present(videoPlayer, animated: true, completion: {
+            self.mp4Player?.play()
+        })
     }
 }
 

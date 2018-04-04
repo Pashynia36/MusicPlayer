@@ -19,6 +19,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Screen Shot 2018-03-28 at 5.35.47 PM" translatesAutoresizingMaskIntoConstraints="NO" id="gjd-uP-BhE">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OKq-Rx-37j">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="XQF-eU-v2z">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k5f-6k-QgI">
+                                            <rect key="frame" x="140" y="420" width="94" height="42"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                            <state key="normal" title="VIDEO"/>
+                                            <connections>
+                                                <action selector="playVideo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qbk-4v-gKP"/>
+                                            </connections>
+                                        </button>
+                                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0AZ-Pn-ogO">
+                                            <rect key="frame" x="67" y="531" width="240" height="128"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </view>
+                                    </subviews>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TrackTime" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EMs-5A-7nY">
                                 <rect key="frame" x="148" y="304" width="79" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -49,6 +77,14 @@
                                     <action selector="playNextSongWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tKH-Kb-tdk"/>
                                 </connections>
                             </button>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="6rW-q3-Zb2">
+                                <rect key="frame" x="128" y="380" width="118" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="setVolumeWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="HdV-YX-QjZ"/>
+                                </connections>
+                            </slider>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9xV-Dd-riH">
                                 <rect key="frame" x="119" y="342" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -100,23 +136,19 @@
                                     <action selector="progressBarAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="9ES-cZ-m9x"/>
                                 </connections>
                             </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="6rW-q3-Zb2">
-                                <rect key="frame" x="128" y="380" width="118" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <action selector="setVolumeWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="HdV-YX-QjZ"/>
-                                </connections>
-                            </slider>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="G67-Bh-WZ0" secondAttribute="trailing" constant="10" id="2of-IK-oex"/>
                             <constraint firstItem="G67-Bh-WZ0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="3uI-4D-E68"/>
                             <constraint firstItem="G67-Bh-WZ0" firstAttribute="top" secondItem="s4C-Jz-A5C" secondAttribute="bottom" constant="8" id="6y3-wj-rdd"/>
+                            <constraint firstItem="gjd-uP-BhE" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="In0-Jr-ng7"/>
+                            <constraint firstItem="gjd-uP-BhE" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="OW5-MH-nEI"/>
                             <constraint firstItem="s4C-Jz-A5C" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="PwX-Hm-h8B"/>
+                            <constraint firstItem="gjd-uP-BhE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="W1h-RN-oDy"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="s4C-Jz-A5C" secondAttribute="trailing" constant="10" id="gXa-Iz-AgP"/>
                             <constraint firstItem="s4C-Jz-A5C" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="w2z-Xv-tkp"/>
+                            <constraint firstItem="gjd-uP-BhE" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="wdB-tf-hhg"/>
                             <constraint firstItem="G67-Bh-WZ0" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="215" id="y3y-77-k4A"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -126,6 +158,7 @@
                         <outlet property="tableView" destination="s4C-Jz-A5C" id="cQn-OC-xU1"/>
                         <outlet property="trackName" destination="G67-Bh-WZ0" id="EqZ-ye-xpI"/>
                         <outlet property="trackTime" destination="EMs-5A-7nY" id="XyX-oh-ySN"/>
+                        <outlet property="videoView" destination="0AZ-Pn-ogO" id="Ktc-FX-BiG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -134,6 +167,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Screen Shot 2018-03-28 at 5.35.47 PM" width="289" height="280"/>
         <image name="next" width="512" height="512"/>
         <image name="playPause" width="626" height="626"/>
         <image name="prev" width="512" height="512"/>

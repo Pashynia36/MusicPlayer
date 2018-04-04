@@ -79,7 +79,7 @@ class MP3Player: NSObject, AVAudioPlayerDelegate {
     func previousSong() {
         
         var playerWasPlaying = false
-        if isPlaying == true {
+        if isPlaying {
             player?.pause()
             isPlaying = false
             playerWasPlaying = true

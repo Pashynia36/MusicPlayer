@@ -8,14 +8,15 @@
 
 import Foundation
 
-class MusicModel {
+class MediaModel {
     
-    var musicSong: String
     var isPlayingNow: Bool
     
-    init(musicSong: String, isPlayingNow: Bool) {
-        
-        self.musicSong = musicSong
+    init(isPlayingNow: Bool) {
         self.isPlayingNow = isPlayingNow
     }
+
+//    convenience init() {
+//        self.init(isPlayingNow: false)
+//    }
 }

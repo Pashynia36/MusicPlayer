@@ -12,10 +12,10 @@ class MusicTableViewCell: UITableViewCell {
 
     @IBOutlet weak var musicLabel: UILabel!
     
-    func prepareMusicForMe(music: MusicModel) {
+    func prepareMusicForMe(isPlaying: MusicModel) {
         
-        musicLabel.text = music.musicSong
-        if music.isPlayingNow {
+        musicLabel.text = isPlaying.musicUrl
+        if isPlaying.isPlayingNow {
             self.backgroundColor = UIColor.lightGray
         } else {
             self.backgroundColor = UIColor.white
