@@ -15,8 +15,4 @@ class MediaModel {
     init(isPlayingNow: Bool) {
         self.isPlayingNow = isPlayingNow
     }
-
-//    convenience init() {
-//        self.init(isPlayingNow: false)
-//    }
 }

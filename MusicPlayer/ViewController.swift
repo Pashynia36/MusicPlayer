@@ -50,14 +50,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return mp3Player!.tracks.count
+        return mp3Player?.tracks.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "music") as! MusicTableViewCell
-        cell.prepareMusicForMe(isPlaying: myMediaModel![indexPath.row] as! MusicModel)
-        return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "music") as? MusicTableViewCell
+        cell?.prepareMusicForMe(isPlaying: myMediaModel![indexPath.row] as! MusicModel)
+        return cell ?? UITableViewCell()
     }
     
     @IBAction func playSong(sender: AnyObject) {
@@ -92,14 +92,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         setNewSong()
     }
-    
-    // MARK:- Demo of song selection
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//
-//        mp3Player?.currentTrackIndex = indexPath.row
-//        mp3Player?.queueTrack()
-//        mp3Player?.play()
-//    }
     
     @IBAction func setVolume(sender: UISlider) {
         
